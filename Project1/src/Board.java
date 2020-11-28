@@ -51,4 +51,26 @@ public class Board {
 		return gameBoard;
 	}
 
+    public void setLastMove(Move lastMove)
+	{
+		this.lastMove.setRow(lastMove.getRow());
+		this.lastMove.setCol(lastMove.getCol());
+		this.lastMove.setValue(lastMove.getValue());
+	}
+	
+	public void setLastLetterPlayed(int lastLetterPlayed)
+	{
+		this.lastLetterPlayed = lastLetterPlayed;
+	}
+	
+	public void setGameBoard(int[][] gameBoard)
+	{
+		for(int i=0; i<8; i++)
+		{
+			for(int j=0; j<8; j++)
+			{
+				this.gameBoard[i][j] = gameBoard[i][j];
+			}
+		}
+	}
 }

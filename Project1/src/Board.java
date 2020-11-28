@@ -15,11 +15,22 @@ public class Board {
 		gameBoard = new int[8][8];
 		for(int i=0; i<8; i++)
 		{
-			for(int j=0; j<8; j++)
-			{
-				gameBoard[i][j] = EMPTY;
-			}
-		}
+            for(int j=0; j<8; j++)
+            {
+                if((i==4 && j==4) || (i==3 && j==3))
+                {
+                    gameBoard[i][j] = 1;
+                }
+                else if((i==3 && j==4) || (i==4 && j==3))
+                {
+                    gameBoard[i][j] = -1;
+                }
+                else
+                {
+                    gameBoard[i][j] = EMPTY;
+                }
+            }
+        }
     }
 
     public Board(Board board)

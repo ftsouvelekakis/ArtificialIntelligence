@@ -11,6 +11,9 @@ public class Main {
         
         maxDepth = app.readDepth(userInputReader, maxDepth);
         turn = app.readTurn(userInputReader, turn);
+
+        GamePlayer playerX = new GamePlayer(Board.X);
+        GamePlayer playerO = new GamePlayer(Board.O);
         
         userInputReader.close();    
     }

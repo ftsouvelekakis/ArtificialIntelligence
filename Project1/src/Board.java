@@ -1,8 +1,8 @@
 public class Board {
     
-    public static int X = 1;
-    public static int O = -1;
-    public static int EMPTY = 0;
+    public static final int X = 1;
+    public static final int O = -1;
+    public static final int EMPTY = 0;
 
     private Move lastMove;
 	private int lastLetterPlayed;
@@ -63,7 +63,7 @@ public class Board {
 		this.lastLetterPlayed = lastLetterPlayed;
 	}
 	
-	public void setGameBoard(int[][] gameBoard)
+    public void setGameBoard(int[][] gameBoard)
 	{
 		for(int i=0; i<8; i++)
 		{
@@ -72,5 +72,33 @@ public class Board {
 				this.gameBoard[i][j] = gameBoard[i][j];
 			}
 		}
+	}
+    
+    public void print()
+	{
+		System.out.println("  A B C D E F G H  ");
+		for(int row=0; row<8; row++)
+		{
+			System.out.print(row + " ");
+			for(int col=0; col<8; col++)
+			{
+				switch (gameBoard[row][col])
+				{
+					case X:
+						System.out.print("X ");
+						break;
+					case O:
+						System.out.print("O ");
+						break;
+					case EMPTY:
+						System.out.print("- ");
+						break;
+					default:
+						break;
+				}
+			}
+			System.out.println(row);
+		}
+		System.out.println("  A B C D E F G H  ");
 	}
 }

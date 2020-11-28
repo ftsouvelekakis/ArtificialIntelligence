@@ -8,7 +8,8 @@ public class Board {
 	private int lastLetterPlayed;
     private int [][] gameBoard;
 
-    public Board(){
+    public Board()
+    {
         lastMove = new Move();
 		lastLetterPlayed = O;
 		gameBoard = new int[8][8];
@@ -35,5 +36,19 @@ public class Board {
 		}
 	}
 
+    public Move getLastMove()
+	{
+		return lastMove;
+	}
+	
+	public int getLastLetterPlayed()
+	{
+		return lastLetterPlayed;
+	}
+	
+	public int[][] getGameBoard()
+	{
+		return gameBoard;
+	}
 
 }

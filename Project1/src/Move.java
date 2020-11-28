@@ -47,5 +47,18 @@ public class Move
 		return value;
 	}
 	
+	public void setRow(int row)
+	{
+		this.row = row;
+	}
 	
+	public void setCol(int col)
+	{
+		this.col = col;
+	}
+	
+	public void setValue(int value)
+	{
+		this.value = value;
+	}
 }

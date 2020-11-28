@@ -3,27 +3,27 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws Exception {
         Scanner userInputReader = new Scanner(System.in);
-        int depth = 0;
+        int maxDepth = 0;
         int turn = -1;
 
         System.out.println("-------------Othello Game-------------\n");
         Main app = new Main();
         
-        depth = app.readDepth(userInputReader, depth);
+        maxDepth = app.readDepth(userInputReader, maxDepth);
         turn = app.readTurn(userInputReader, turn);
         
         userInputReader.close();    
     }
 
-    public int readDepth(Scanner input, int depth){
+    public int readDepth(Scanner input, int maxDepth){
         while(true){
             System.out.print("Please select minimax algorithm depth (Valid input > 0) : ");
             try { 
                 
-                depth = Integer.parseInt(input.nextLine());
-                if(depth>0) 
+                maxDepth = Integer.parseInt(input.nextLine());
+                if(maxDepth>0) 
                 {
-                    System.out.println("\nSelected depth is : " + depth);  
+                    System.out.println("\nSelected depth is : " + maxDepth);  
                     break;
                 }
                 else{
@@ -35,7 +35,7 @@ public class Main {
             }
             
         }
-        return depth;
+        return maxDepth;
     }
 
     public int readTurn(Scanner input,int turn){

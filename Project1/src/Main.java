@@ -14,6 +14,9 @@ public class Main {
 
         GamePlayer playerX = new GamePlayer(Board.X);
         GamePlayer playerO = new GamePlayer(Board.O);
+
+        Board board = new Board();
+        board.print();
         
         userInputReader.close();    
     }
@@ -47,11 +50,11 @@ public class Main {
             try {
                 turn = Integer.parseInt(input.nextLine());
                 if (turn==1){
-                    System.out.println("\nHuman starts");
+                    System.out.println("\nHuman starts\n");
                     break;
                 }
                 else if(turn==0){
-                    System.out.println("\nAI starts");
+                    System.out.println("\nAI starts\n");
                     break;
                 }
                 else{

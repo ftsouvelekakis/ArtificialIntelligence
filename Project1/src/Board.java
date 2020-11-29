@@ -85,6 +85,13 @@ public class Board {
 		}
 	}
     
+    public void makeMove(int row, int col, int moveLetter)
+	{
+		gameBoard[row][col] = moveLetter;
+		lastMove = new Move(row, col);
+		lastLetterPlayed = moveLetter;
+	}
+
     public void print()
 	{
 		System.out.println("  A B C D E F G H  ");

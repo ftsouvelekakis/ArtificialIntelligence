@@ -100,73 +100,60 @@ public class Board {
                     return false;
                 }
                 else if(lastLetterPlayed == O){
-					if(col == 0 && row == 0){
-						return scanRowRight(row,col) || scanColDown(row, col);
-					}
-					else if(col>0 && col<7 && row>0 && row<7){
-						return (scanRowRight(row,col) || scanRowLeft(row,col) || scanColDown(row, col) || scanColUp(row, col));
-					}
-					else if(col == 7 && row == 7){
-						return scanRowLeft(row,col) || scanColUp(row, col);
-					}
+					return (scanRow(row, col) || scanCol(row, col));
                 }
             }
         }
         return false;
 	}
 
-	public boolean scanRowRight(int row,int col){
-		if(gameBoard[row][col]==EMPTY && gameBoard[row][col+1]==O){	
-			while((col+2)<=7){
-				if(gameBoard[row][col]==X){
-					return true;
+	public boolean scanRow(int row,int col){
+		if(col<7){
+			if(gameBoard[row][col+1]==O){	
+				while((col+2)<=7){
+					if(gameBoard[row][col]==X){
+						return true;
+					}
+					col=col+1;
 				}
-				col=col+1;
+			}
+		}
+		if(col>0){
+			if(gameBoard[row][col-1]==O){	
+				while((col-2)>=0){
+					if(gameBoard[row][col]==X){
+						return true;
+					}
+					col=col-1;
+				}
 			}
 		}
 		return false;
 	}
 
-	public boolean scanRowLeft(int row,int col){
-		if(gameBoard[row][col]==EMPTY && gameBoard[row][col-1]==O){	
-			while((col-2)>=0){
-				if(gameBoard[row][col]==X){
-					return true;
+	public boolean scanCol(int row,int col){
+		if(row<7){
+			if(gameBoard[row+1][col]==O){	
+				while((row+2)<=7){
+					if(gameBoard[row][col]==X){
+						return true;
+					}
+					row=row+1;
 				}
-				col=col-1;
+			}
+		}
+		if(row>0){
+			if(gameBoard[row-1][col]==O){	
+				while((row-2)>=0){
+					if(gameBoard[row][col]==X){
+						return true;
+					}
+					row=row-1;
+				}
 			}
 		}
 		return false;
 	}
-
-	
-	public boolean scanColDown(int row,int col){
-		if(gameBoard[row][col]==EMPTY && gameBoard[row+1][col]==O){	
-			while((row+2)<=7){
-				if(gameBoard[row][col]==X){
-					return true;
-				}
-				row=row+1;
-			}
-		}
-		return false;
-	}
-
-	public boolean scanColUp(int row,int col){
-		if(gameBoard[row][col]==EMPTY && gameBoard[row-1][col]==O){	
-			while((row-2)>=0){
-				if(gameBoard[row][col]==X){
-					return true;
-				}
-				row=row-1;
-			}
-		}
-		return false;
-	}
-
-
-
-
 
     public void print()
 	{

@@ -97,21 +97,21 @@ public class Board {
         if(row >= 0 && row < 8 && col >= 0 && col < 8 ){
             if(gameBoard[row][col] == EMPTY){
                 if(lastLetterPlayed == X){
-                    return false;
+                    return (scanRow(row, col,O,X)||scanCol(row, col,O,X)||scanDiag0(row,col,O,X)||scanDiag1(row, col,O,X));
                 }
                 else if(lastLetterPlayed == O){
-					return (scanRow(row, col) || scanCol(row, col));
+					return (scanRow(row, col,X,O)||scanCol(row, col,X,O)||scanDiag0(row,col,X,O)||scanDiag1(row, col,X,O));
                 }
             }
         }
         return false;
 	}
 
-	public boolean scanRow(int row,int col){
+	public boolean scanRow(int row,int col,int player,int opponent){
 		if(col<7){
-			if(gameBoard[row][col+1]==O){	
+			if(gameBoard[row][col+1]==opponent){	
 				while((col+2)<=7){
-					if(gameBoard[row][col]==X){
+					if(gameBoard[row][col]==player){
 						return true;
 					}
 					col=col+1;
@@ -119,9 +119,9 @@ public class Board {
 			}
 		}
 		if(col>0){
-			if(gameBoard[row][col-1]==O){	
+			if(gameBoard[row][col-1]==opponent){	
 				while((col-2)>=0){
-					if(gameBoard[row][col]==X){
+					if(gameBoard[row][col]==player){
 						return true;
 					}
 					col=col-1;
@@ -131,11 +131,11 @@ public class Board {
 		return false;
 	}
 
-	public boolean scanCol(int row,int col){
+	public boolean scanCol(int row,int col,int player,int opponent){
 		if(row<7){
-			if(gameBoard[row+1][col]==O){	
+			if(gameBoard[row+1][col]==opponent){	
 				while((row+2)<=7){
-					if(gameBoard[row][col]==X){
+					if(gameBoard[row][col]==player){
 						return true;
 					}
 					row=row+1;
@@ -143,12 +143,64 @@ public class Board {
 			}
 		}
 		if(row>0){
-			if(gameBoard[row-1][col]==O){	
+			if(gameBoard[row-1][col]==opponent){	
 				while((row-2)>=0){
-					if(gameBoard[row][col]==X){
+					if(gameBoard[row][col]==player){
 						return true;
 					}
 					row=row-1;
+				}
+			}
+		}
+		return false;
+	}
+
+	public boolean scanDiag0(int row,int col,int player,int opponent){
+		if(row<7 && col<7){
+			if(gameBoard[row+1][col+1]==opponent){	
+				while((row+2)<=7 && (col+2)<=7){
+					if(gameBoard[row][col]==player){
+						return true;
+					}
+					row=row+1;
+					col=col+1;
+				}
+			}
+		}
+		if(row>0 && col>0){
+			if(gameBoard[row-1][col-1]==opponent){	
+				while((row-2)>=0 && (col-2)>=0){
+					if(gameBoard[row][col]==player){
+						return true;
+					}
+					row=row-1;
+					col=col-1;
+				}
+			}
+		}
+		return false;
+	}
+
+	public boolean scanDiag1(int row,int col,int player,int opponent){
+		if(row<7 && col>0){
+			if(gameBoard[row+1][col-1]==opponent){	
+				while((row+2)<=7 && (col-2)>=0){
+					if(gameBoard[row][col]==player){
+						return true;
+					}
+					row=row+1;
+					col=col-1;
+				}
+			}
+		}
+		if(row>0 && col<7){
+			if(gameBoard[row-1][col+1]==opponent){	
+				while((row-2)>=0 && (col+2)<=7){
+					if(gameBoard[row][col]==player){
+						return true;
+					}
+					row=row-1;
+					col=col+1;
 				}
 			}
 		}

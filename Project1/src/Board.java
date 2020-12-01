@@ -89,18 +89,21 @@ public class Board {
     
     public void makeMove(int row, int col, int moveLetter)
 	{
-		gameBoard[row][col] = moveLetter;
-		lastMove = new Move(row, col);
-		lastLetterPlayed = moveLetter;
-		flipRowRight(row,col,moveLetter);
-		flipRowLeft(row, col, moveLetter);
-		flipColDown(row, col, moveLetter);
-		flipColUp(row, col, moveLetter);
-		flipDiag0Up(row, col, moveLetter);
-		flipDiag0Down(row, col, moveLetter);
-		flipDiag1Down(row, col, moveLetter);
-		flipDiag1Up(row, col, moveLetter);
-
+		if(gameBoard[row][col]==-2){
+			gameBoard[row][col] = moveLetter;
+			lastMove = new Move(row, col);
+			lastLetterPlayed = moveLetter;
+			flipRowRight(row,col,moveLetter);
+			flipRowLeft(row, col, moveLetter);
+			flipColDown(row, col, moveLetter);
+			flipColUp(row, col, moveLetter);
+			flipDiag0Up(row, col, moveLetter);
+			flipDiag0Down(row, col, moveLetter);
+			flipDiag1Down(row, col, moveLetter);
+			flipDiag1Up(row, col, moveLetter);
+		}else{
+			System.out.println("Your move is not valid please try again\n");
+		}
 	}
 
 	public void flipRowRight(int row,int col,int moveLetter){
@@ -394,6 +397,7 @@ public class Board {
                     case EMPTY:
                         if(isValidMove(row, col))
                         {
+							gameBoard[row][col]=-2;
                             System.out.print("+ ");
                         }else
                         {

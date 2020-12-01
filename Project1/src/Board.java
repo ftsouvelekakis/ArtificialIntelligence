@@ -399,7 +399,7 @@ public class Board {
                     case EMPTY:
                         if(isValidMove(row, col))
                         {
-							gameBoard[row][col]=-2;
+							gameBoard[row][col]=VALID;
                             System.out.print("+ ");
                         }else
                         {

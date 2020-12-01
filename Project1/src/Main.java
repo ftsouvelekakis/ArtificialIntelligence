@@ -12,12 +12,37 @@ public class Main {
         maxDepth = app.readDepth(userInputReader, maxDepth);
         turn = app.readTurn(userInputReader, turn);
 
-        GamePlayer playerX = new GamePlayer(Board.X);
-        GamePlayer playerO = new GamePlayer(Board.O);
+        GamePlayer Χplayer = new GamePlayer(Board.X);
+        GamePlayer Οplayer = new GamePlayer(Board.O);
 
         Board board = new Board();
         board.print();
-        
+		while(!board.isTerminal())
+		{
+			System.out.println();
+			switch (board.getLastLetterPlayed())
+			{
+				case Board.X:
+                    System.out.println("O moves");
+					//Move OMove = OPlayer.MiniMax(board);
+					//board.makeMove(OMove.getRow(), OMove.getCol(), Board.O);
+					int rowO = userInputReader.nextInt();
+					int colO = userInputReader.nextInt();
+					board.makeMove(rowO, colO, Board.O);
+					break;
+				case Board.O:
+                    System.out.println("X moves");
+					//Move XMove = XPlayer.MiniMax(board);
+                    //board.makeMove(XMove.getRow(), XMove.getCol(), Board.X);
+                    int rowX = userInputReader.nextInt();
+					int colX = userInputReader.nextInt();
+					board.makeMove(rowX, colX, Board.X);
+					break;
+				default:
+					break;
+			}
+			board.print();
+		} 
         userInputReader.close();    
     }
 

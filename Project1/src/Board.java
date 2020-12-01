@@ -5,6 +5,8 @@ public class Board {
     public static final int X = 1;
     public static final int O = -1;
 	public static final int EMPTY = 0;
+	public static final int VALID = -2;
+	
 
 	private Move lastMove;
 	private int lastLetterPlayed;
@@ -256,7 +258,7 @@ public class Board {
 				while((col+2)<=7){
 					if(gameBoard[row][col+2]==player){
 						return true;
-					}else if(gameBoard[row][col+2]==EMPTY){
+					}else if(gameBoard[row][col+2]==EMPTY||gameBoard[row][col+2]==VALID){
 						break;
 					}
 					col=col+1;
@@ -271,7 +273,7 @@ public class Board {
 				while((col-2)>=0){
 					if(gameBoard[row][col-2]==player){
 						return true;
-					}else if(gameBoard[row][col-2]==EMPTY){
+					}else if(gameBoard[row][col-2]==EMPTY||gameBoard[row][col-2]==VALID){
 						break;
 					}
 					col=col-1;
@@ -403,6 +405,9 @@ public class Board {
                         {
                             System.out.print("- ");
                         }
+						break;
+					case VALID:
+						System.out.print("+ ");
 						break;
 					default:
 						break;

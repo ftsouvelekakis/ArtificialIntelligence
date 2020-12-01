@@ -1,4 +1,4 @@
-
+import java.util.ArrayList;
 
 public class Board {
     
@@ -10,13 +10,17 @@ public class Board {
 
 	private Move lastMove;
 	private int lastLetterPlayed;
-    private int [][] gameBoard;
+	private int [][] gameBoard;
+	private ArrayList<Integer> validRowsHelper;
+	private ArrayList<Integer> validColsHelper;
 
     public Board()
     {
         lastMove = new Move();
 		lastLetterPlayed = O;
 		gameBoard = new int[8][8];
+		validRowsHelper = new ArrayList<>();
+		validColsHelper = new ArrayList<>();
 		for(int i=0; i<8; i++)
 		{
             for(int j=0; j<8; j++)
@@ -400,6 +404,8 @@ public class Board {
                         if(isValidMove(row, col))
                         {
 							gameBoard[row][col]=VALID;
+							validRowsHelper.add(row);
+							validColsHelper.add(col);
                             System.out.print("+ ");
                         }else
                         {
@@ -431,5 +437,25 @@ public class Board {
             }
         }
         return true;
-    }
+	}
+	
+	public ArrayList<Integer> getValidRowsHelper()
+	{
+		return this.validRowsHelper;
+	}
+
+	public ArrayList<Integer> getValidColsHelper()
+	{
+		return this.validColsHelper;
+	}
+
+	public void cleanValidRowsHelper()
+	{
+		this.getValidRowsHelper().clear();
+	}
+
+	public void cleanValidColsHelper()
+	{
+		this.getValidColsHelper().clear();
+	}
 }

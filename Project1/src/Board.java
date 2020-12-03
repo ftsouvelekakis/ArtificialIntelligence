@@ -9,6 +9,8 @@ public class Board {
 	
 	int tempRow;
 	int tempCol;
+	int countX;
+	int countO;
 	boolean scanRowLeft=false;
 	boolean scanRowRight=false;
 	boolean scanColDown=false;
@@ -358,6 +360,8 @@ public class Board {
 
 	public void print()
 	{
+		countX=0;
+		countO=0;
 		System.out.println("  0 1 2 3 4 5 6 7  ");
 		for(int row=0; row<8; row++)
 		{
@@ -368,9 +372,11 @@ public class Board {
 				{
 					case X:
 						System.out.print("X ");
+						countX++;
 						break;
 					case O:
 						System.out.print("O ");
+						countO++;
 						break;
 					case EMPTY:
 						resetScanFlags();
@@ -395,6 +401,7 @@ public class Board {
 			System.out.println(row);
 		}
 		System.out.println("  0 1 2 3 4 5 6 7  ");
+		System.out.println("\nX:" +countX + " O:"+countO);
 	}
 
 	public boolean isTerminal()

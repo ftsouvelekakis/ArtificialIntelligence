@@ -46,6 +46,8 @@ public class Board {
 		lastMove = board.lastMove;
 		lastLetterPlayed = board.lastLetterPlayed;
 		gameBoard = new int[8][8];
+		this.validRowsHelper = board.validRowsHelper;
+		this.validColsHelper = board.validColsHelper;
 		for(int i=0; i<8; i++)
 		{
 			for(int j=0; j<8; j++)
@@ -95,10 +97,20 @@ public class Board {
     
     public void makeMove(int row, int col, int moveLetter)
 	{
-		if(gameBoard[row][col]==-2){
+		if(gameBoard[row][col]==VALID){
 			gameBoard[row][col] = moveLetter;
 			lastMove = new Move(row, col);
 			lastLetterPlayed = moveLetter;
+			resetValidMoves();
+			flip8Dim(row,col,moveLetter);
+		}
+		else
+		{
+			//System.out.println("Your move is not valid please try again\n");
+		}
+	}
+
+	public void flip8Dim(int row,int col,int moveLetter){
 			flipRowRight(row,col,moveLetter);
 			flipRowLeft(row, col, moveLetter);
 			flipColDown(row, col, moveLetter);
@@ -107,154 +119,112 @@ public class Board {
 			flipDiag0Down(row, col, moveLetter);
 			flipDiag1Down(row, col, moveLetter);
 			flipDiag1Up(row, col, moveLetter);
-		}else{
-			System.out.println("Your move is not valid please try again\n");
-		}
 	}
 
 	public void flipRowRight(int row,int col,int moveLetter){
-		if(col<=5){
-			if(gameBoard[row][col+1]!=EMPTY){
-				if(scanRow(row, col, moveLetter)){
+		//if(col<=5){
+			//if(gameBoard[row][col+1]!=EMPTY){
+				if(scanRowRight(row, col, moveLetter)){
 					while(gameBoard[row][col+1]!=moveLetter){
 						gameBoard[row][col+1]=moveLetter;
 						col++;
 					}
 				}
-			}
-		}
+			//}
+		//}
 	}
-
 	public void flipRowLeft(int row,int col,int moveLetter){
-		if(col>=2){
-			if(gameBoard[row][col-1]!=EMPTY){
-				if(scanRow(row, col, moveLetter)){
+		//if(col>=2){
+			//if(gameBoard[row][col-1]!=EMPTY){
+				if(scanRowLeft(row, col, moveLetter)){
 					while(gameBoard[row][col-1]!=moveLetter){
 						gameBoard[row][col-1]=moveLetter;
 						col--;
 					}
 				}
-			}
-		}
+			//}
+		//}
 	}
-
 	public void flipColDown(int row,int col, int moveLetter){
-		if(row<=5){	
-			if(gameBoard[row+1][col]!=EMPTY){	
-				if(scanCol(row, col, moveLetter)){
+		//if(row<=5){	
+			//if(gameBoard[row+1][col]!=EMPTY){	
+				if(scanColDown(row, col, moveLetter)){
 					while(gameBoard[row+1][col]!=moveLetter){
 						gameBoard[row+1][col]=moveLetter;
 						row++;
 					}
 				}
-			}
-		}
+			//}
+		//}
 	}
-
 	public void flipColUp(int row,int col, int moveLetter){	
-		if(row>=2){	
-			if(gameBoard[row-1][col]!=EMPTY){	
-				if(scanCol(row, col, moveLetter)){
+		//if(row>=2){	
+			//if(gameBoard[row-1][col]!=EMPTY){	
+				if(scanColUp(row, col, moveLetter)){
 					while(gameBoard[row-1][col]!=moveLetter){
 						gameBoard[row-1][col]=moveLetter;
 						row--;
 					}
 				}
-			}
-		}
-	}
-		
+			//}
+		//}
+	}		
 	public void flipDiag0Down(int row,int col,int moveLetter){
-		if(row<=5 && col<=5){
-			if(gameBoard[row+1][col+1]!=EMPTY){
-				if(scanDiag0(row, col, moveLetter)){
+		//if(row<=5 && col<=5){
+			//if(gameBoard[row+1][col+1]!=EMPTY){
+				if(scanDiag0Down(row, col, moveLetter)){
 					while(gameBoard[row+1][col+1]!=moveLetter){	
 						gameBoard[row+1][col+1]=moveLetter;
 						col++;
 						row++;
 					}
 				}
-			}
-		}
+			//}
+		//}
 	}
-
 	public void flipDiag0Up(int row,int col,int moveLetter){
-		if(row>=2&&col>=2){	
-			if(gameBoard[row-1][col-1]!=EMPTY){	
-				if(scanDiag0(row, col, moveLetter)){
+		//if(row>=2&&col>=2){	
+			//if(gameBoard[row-1][col-1]!=EMPTY){	
+				if(scanDiag0Up(row, col, moveLetter)){
 					while(gameBoard[row-1][col-1]!=moveLetter){	
 						gameBoard[row-1][col-1]=moveLetter;
 						col--;
 						row--;
 					}
 				}
-			}
-		}
+			//}
+		//}
 	}
-
 	public void flipDiag1Down(int row,int col,int moveLetter){
-		if(row<=5&&col>=2){
-			if(gameBoard[row+1][col-1]!=EMPTY){
-				if(scanDiag1(row, col, moveLetter)){
+		//if(row<=5&&col>=2){
+			//if(gameBoard[row+1][col-1]!=EMPTY){
+				if(scanDiag1Down(row, col, moveLetter)){
 					while(gameBoard[row+1][col-1]!=moveLetter){	
 						gameBoard[row+1][col-1]=moveLetter;
 						col--;
 						row++;
 					}
 				}
-			}
-		}
+			//}
+		//}
 	}
-
 	public void flipDiag1Up(int row,int col,int moveLetter){
-		if(row>=2&&col<=5){
-			if(gameBoard[row-1][col+1]!=EMPTY){
-				if(scanDiag1(row, col, moveLetter)){
+		//if(row>=2&&col<=5){
+			//if(gameBoard[row-1][col+1]!=EMPTY){
+				if(scanDiag1Up(row, col, moveLetter)){
 					while(gameBoard[row-1][col+1]!=moveLetter){	
 						gameBoard[row-1][col+1]=moveLetter;
 						col++;
 						row--;
 					}
 				}
-			}
-		}
+			//}
+		//}
 	}
 
-	public int opponent(int player){
-		if (player == 1){
-			return -1;
-		}
-		else{
-			return 1;
-		}
-	}
-
-    public boolean isValidMove(int row, int col)
-	{
-        if(row >= 0 && row < 8 && col >= 0 && col < 8 ){
-            if(gameBoard[row][col] == EMPTY){
-                if(lastLetterPlayed == X){
-                    return (scanRow(row, col,O)||scanCol(row, col,O)||scanDiag0(row,col,O)||scanDiag1(row, col,O));
-                }
-                else if(lastLetterPlayed == O){
-					return (scanRow(row, col,X)||scanCol(row, col,X)||scanDiag0(row,col,X)||scanDiag1(row, col,X));
-                }
-            }
-        }
-        return false;
-	}
-	public boolean scanRow(int row,int col,int player){
-		return (scanRowRight(row, col, player)||scanRowLeft(row, col, player));
-	}
-	public boolean scanCol(int row,int col,int player){
-		return (scanColDown(row, col, player)||scanColUp(row, col, player));
-	}
-	public boolean scanDiag0(int row,int col,int player){
-		return (scanDiag0Down(row, col, player)||scanDiag0Up(row, col, player));
-	}
-	public boolean scanDiag1(int row,int col,int player){
-		return (scanDiag1Down(row, col, player)||scanDiag1Up(row, col, player));
-	}
+ 	public boolean scan8Dim(int row,int col,int player){
+		return (scanRowRight(row, col, player)||scanRowLeft(row, col, player)||scanColDown(row, col, player)||scanColUp(row, col, player)||scanDiag0Down(row, col, player)||scanDiag0Up(row, col, player)||scanDiag1Down(row, col, player)||scanDiag1Up(row, col, player));
+	 }
 
 	public boolean scanRowRight(int row,int col,int player){
 		if(col<7){
@@ -262,10 +232,11 @@ public class Board {
 				while((col+2)<=7){
 					if(gameBoard[row][col+2]==player){
 						return true;
-					}else if(gameBoard[row][col+2]==EMPTY||gameBoard[row][col+2]==VALID){
+					}else if(gameBoard[row][col+2]==opponent(player)){
+						col=col+1;
+					}else{
 						break;
 					}
-					col=col+1;
 				}
 			}
 		}
@@ -277,26 +248,27 @@ public class Board {
 				while((col-2)>=0){
 					if(gameBoard[row][col-2]==player){
 						return true;
-					}else if(gameBoard[row][col-2]==EMPTY||gameBoard[row][col-2]==VALID){
+					}else if(gameBoard[row][col-2]==opponent(player)){
+						col=col-1;
+					}else{
 						break;
 					}
-					col=col-1;
 				}
 			}
 		}
 		return false;
 	}
-
 	public boolean scanColDown(int row,int col,int player){
 		if(row<7){
 			if(gameBoard[row+1][col]==opponent(player)){	
 				while((row+2)<=7){
 					if(gameBoard[row+2][col]==player){
 						return true;
-					}else if(gameBoard[row+2][col]==EMPTY){
+					}else if(gameBoard[row+2][col]==opponent(player)){
+						row=row+1;
+					}else{
 						break;
 					}
-					row=row+1;
 				}
 			}
 		}
@@ -308,27 +280,28 @@ public class Board {
 				while((row-2)>=0){
 					if(gameBoard[row-2][col]==player){
 						return true;
-					}else if(gameBoard[row-2][col]==EMPTY){
+					}else if(gameBoard[row-2][col]==opponent(player)){
+						row=row-1;
+					}else{
 						break;
 					}
-					row=row-1;
 				}
 			}
 		}
 		return false;
 	}
-
 	public boolean scanDiag0Down(int row,int col,int player){
 		if(row<7 && col<7){
 			if(gameBoard[row+1][col+1]==opponent(player)){	
 				while((row+2)<=7 && (col+2)<=7){
 					if(gameBoard[row+2][col+2]==player){
 						return true;
-					}else if(gameBoard[row+2][col+2]==EMPTY){
+					}else if(gameBoard[row+2][col+2]==opponent(player)){
+						row=row+1;
+						col=col+1;
+					}else{
 						break;
 					}
-					row=row+1;
-					col=col+1;
 				}
 			}
 		}
@@ -340,28 +313,29 @@ public class Board {
 				while((row-2)>=0 && (col-2)>=0){
 					if(gameBoard[row-2][col-2]==player){
 						return true;
-					}else if(gameBoard[row-2][col-2]==EMPTY){
+					}else if(gameBoard[row-2][col-2]==opponent(player)){
+						row=row-1;
+						col=col-1;
+					}else{
 						break;
 					}
-					row=row-1;
-					col=col-1;
 				}
 			}
 		}
 		return false;
 	}
-
 	public boolean scanDiag1Down(int row,int col,int player){
 		if(row<7 && col>0){
 			if(gameBoard[row+1][col-1]==opponent(player)){	
 				while((row+2)<=7 && (col-2)>=0){
 					if(gameBoard[row+2][col-2]==player){
 						return true;
-					}else if(gameBoard[row+2][col-2]==EMPTY){
+					}else if(gameBoard[row+2][col-2]==opponent(player)){
+						row=row+1;
+						col=col-1;
+					}else{
 						break;
 					}
-					row=row+1;
-					col=col-1;
 				}
 			}
 		}
@@ -373,18 +347,28 @@ public class Board {
 				while((row-2)>=0 && (col+2)<=7){
 					if(gameBoard[row-2][col+2]==player){
 						return true;
-					}else if(gameBoard[row-2][col+2]==EMPTY){
+					}else if(gameBoard[row-2][col+2]==opponent(player)){
+						row=row-1;
+						col=col+1;
+					}else{
 						break;
 					}
-					row=row-1;
-					col=col+1;
 				}
 			}
 		}
 		return false;
 	}
 
-    public void print()
+	public int opponent(int player){
+		if (player == 1){
+			return -1;
+		}
+		else{
+			return 1;
+		}
+	}
+	
+	public void print()
 	{
 		System.out.println("  0 1 2 3 4 5 6 7  ");
 		for(int row=0; row<8; row++)
@@ -438,24 +422,20 @@ public class Board {
         }
         return true;
 	}
-	
-	public ArrayList<Integer> getValidRowsHelper()
+
+	public boolean isValidMove(int row, int col)
 	{
-		return this.validRowsHelper;
+        return (scan8Dim(row,col,opponent(lastLetterPlayed)));
 	}
 
-	public ArrayList<Integer> getValidColsHelper()
-	{
-		return this.validColsHelper;
-	}
-
-	public void cleanValidRowsHelper()
-	{
-		this.getValidRowsHelper().clear();
-	}
-
-	public void cleanValidColsHelper()
-	{
-		this.getValidColsHelper().clear();
+	public void resetValidMoves(){
+		for (int i = 0; i < validColsHelper.size(); i++)
+        {
+            if(getGameBoard()[validRowsHelper.get(i)][validColsHelper.get(i)]==VALID){
+				getGameBoard()[validRowsHelper.get(i)][validColsHelper.get(i)] = EMPTY;
+			}
+        }
+        validRowsHelper.clear();
+		validColsHelper.clear();
 	}
 }

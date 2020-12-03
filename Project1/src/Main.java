@@ -41,12 +41,6 @@ public class Main {
 				default:
 					break;
             }
-            for (int i = 0; i < board.getValidColsHelper().size(); i++)
-            {
-                board.getGameBoard()[board.getValidRowsHelper().get(i)][board.getValidColsHelper().get(i)] = 0;
-            }
-            board.cleanValidRowsHelper();
-            board.cleanValidColsHelper();
 			board.print();
 		} 
         userInputReader.close();    

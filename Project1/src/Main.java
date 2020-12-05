@@ -19,30 +19,43 @@ public class Main {
         board.print();
 		while(!board.isTerminal())
 		{
-			System.out.println();
-			switch (board.getLastLetterPlayed())
-			{
-				case Board.X:
+            System.out.println();
+            switch (board.getLastLetterPlayed())
+            {
+                case Board.X:
                     System.out.println("O moves");
-					//Move OMove = OPlayer.MiniMax(board);
-					//board.makeMove(OMove.getRow(), OMove.getCol(), Board.O);
-					int rowO = userInputReader.nextInt();
-					int colO = userInputReader.nextInt();
-					board.makeMove(rowO, colO, Board.O);
-					break;
-				case Board.O:
+                    if(board.noValidMoves(Board.O)){
+                        //Move OMove = OPlayer.MiniMax(board);
+                        //board.makeMove(OMove.getRow(), OMove.getCol(), Board.O);
+                        int rowO = userInputReader.nextInt();
+                        int colO = userInputReader.nextInt();
+                        board.makeMove(rowO, colO, Board.O);
+                    }
+                    break;
+                case Board.O:  
                     System.out.println("X moves");
-					//Move XMove = XPlayer.MiniMax(board);
-                    //board.makeMove(XMove.getRow(), XMove.getCol(), Board.X);
-                    int rowX = userInputReader.nextInt();
-					int colX = userInputReader.nextInt();
-					board.makeMove(rowX, colX, Board.X);
-					break;
-				default:
-					break;
+                    if(board.noValidMoves(Board.X)){
+                        //Move XMove = XPlayer.MiniMax(board);
+                        //board.makeMove(XMove.getRow(), XMove.getCol(), Board.X);
+                        int rowX = userInputReader.nextInt();
+                        int colX = userInputReader.nextInt();
+                        board.makeMove(rowX, colX, Board.X);
+                    }
+                    break;
+                default:
+                    break;
             }
-			board.print();
-		} 
+            if(board.countNoValid==2){
+                System.out.println("\nBoth players have no valid moves the game has ended");
+                System.out.println("Final score = X:" + board.countX + " O:"+ board.countO);
+            }else{
+                board.print();
+            }
+        }
+        if(board.countNoValid!=2){
+            System.out.println("\nNo empty cells found");
+            System.out.println("Final score = X:" + board.countX + " O:"+ board.countO);
+        }
         userInputReader.close();    
     }
 

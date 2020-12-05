@@ -1,6 +1,5 @@
 import java.util.ArrayList;
-
-public class Board {
+public class Board{
 	
 	public static final int X = 1;
 	public static final int O = -1;
@@ -11,6 +10,7 @@ public class Board {
 	int tempCol;
 	int countX;
 	int countO;
+	int countNoValid;
 	boolean scanRowLeft=false;
 	boolean scanRowRight=false;
 	boolean scanColDown=false;
@@ -362,7 +362,7 @@ public class Board {
 	{
 		countX=0;
 		countO=0;
-		System.out.println("  0 1 2 3 4 5 6 7  ");
+		System.out.println("\n  0 1 2 3 4 5 6 7  ");
 		for(int row=0; row<8; row++)
 		{
 			System.out.print(row + " ");
@@ -380,8 +380,8 @@ public class Board {
 						break;
 					case EMPTY:
 						resetScanFlags();
-                        if(isValidMove(row, col))
-                        {
+						if(isValidMove(row, col))
+						{
 							gameBoard[row][col]=VALID;
 							validRowsHelper.add(row);
 							validColsHelper.add(col);
@@ -406,16 +406,20 @@ public class Board {
 
 	public boolean isTerminal()
 	{
+		if(countNoValid==2){
+			return true;
+		}
 		for(int row=0; row<8; row++)
 		{
 			for(int col=0; col<8; col++)
 			{
-				if(gameBoard[row][col] == EMPTY)
+				if(gameBoard[row][col] == EMPTY || gameBoard[row][col] == VALID)
 				{
 					return false;
 				}
 			}
 		}
+		
 		return true;
 	}
 
@@ -428,6 +432,24 @@ public class Board {
 		scanDiag0Up=false;
 		scanDiag1Down=false;
 		scanDiag1Up=false;
+	}
+
+	public boolean noValidMoves(int moveLetter){
+		if (validRowsHelper.size()==0){
+			if(moveLetter==O)
+				System.out.println("Player O has no valid moves" );
+			else
+			{
+				System.out.println("Player X has no valid moves" );
+			}
+			lastLetterPlayed=moveLetter;
+			countNoValid++;
+			return false;
+		}
+		else{
+			countNoValid=0;
+			return true;
+		}
 	}
 
 	public boolean isValidMove(int row, int col)

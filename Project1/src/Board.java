@@ -468,4 +468,25 @@ public class Board{
 		validRowsHelper.clear();
 		validColsHelper.clear();
 	}
+
+	public int evaluate()
+	{
+		int weights[][]={{120,-20,20,5,5,20,-20,120},
+					  	{-20,-40,-5,-5,-5,-5,-40,-20},
+					  	{20,-5,15,3,3,15,-5,20},
+					  	{5,-5,3,3,3,3,-5,5},
+					  	{5,-5,3,3,3,3,-5,5},
+					  	{20,-5,15,3,3,15,-5,20},
+					  	{-20,-40,-5,-5,-5,-5,-40,-20},
+					  	{120,-20,20,5,5,20,-20,120}};
+		int sum = 0;
+		for(int i=0; i<8; i++)
+			for(int j=0; j<8; j++) {
+				if(gameBoard[i][j] == opponent(lastLetterPlayed))
+					sum += weights[i][j];
+			}
+		return sum;
+	}
+
+
 }

@@ -3,17 +3,20 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws Exception {
         Scanner userInputReader = new Scanner(System.in);
-        int maxDepth = 0;
         int turn = -1;
+        int maxDepth=0;
 
         System.out.println("-------------Othello Game-------------\n");
         Main app = new Main();
         
-        maxDepth = app.readDepth(userInputReader, maxDepth);
+        maxDepth =app.readDepth(userInputReader,maxDepth);
         turn = app.readTurn(userInputReader, turn);
-
-        GamePlayer Χplayer = new GamePlayer(Board.X);
-        GamePlayer Οplayer = new GamePlayer(Board.O);
+        
+        GamePlayer ΧPlayer = new GamePlayer(maxDepth,Board.X);
+        GamePlayer ΟPlayer = new GamePlayer(maxDepth,Board.O);
+        
+        
+        
 
         Board board = new Board();
         board.print();
@@ -25,21 +28,31 @@ public class Main {
                 case Board.X:
                     System.out.println("O moves");
                     if(board.noValidMoves(Board.O)){
-                        //Move OMove = OPlayer.MiniMax(board);
-                        //board.makeMove(OMove.getRow(), OMove.getCol(), Board.O);
-                        int rowO = userInputReader.nextInt();
-                        int colO = userInputReader.nextInt();
-                        board.makeMove(rowO, colO, Board.O);
+                        if(turn==1){
+                            Move OMove = ΟPlayer.MiniMax(board);
+                            board.makeMove(OMove.getRow(), OMove.getCol(), Board.O);
+                        }
+                        else
+                        {
+                            int rowO = userInputReader.nextInt();
+                            int colO = userInputReader.nextInt();
+                            board.makeMove(rowO, colO, Board.O);
+                        }   
                     }
                     break;
                 case Board.O:  
                     System.out.println("X moves");
                     if(board.noValidMoves(Board.X)){
-                        //Move XMove = XPlayer.MiniMax(board);
-                        //board.makeMove(XMove.getRow(), XMove.getCol(), Board.X);
-                        int rowX = userInputReader.nextInt();
-                        int colX = userInputReader.nextInt();
-                        board.makeMove(rowX, colX, Board.X);
+                        if(turn==0){
+                            Move XMove = ΧPlayer.MiniMax(board);
+                            board.makeMove(XMove.getRow(), XMove.getCol(), Board.X);
+                        }
+                        else
+                        {
+                            int rowX = userInputReader.nextInt();
+                            int colX = userInputReader.nextInt();
+                            board.makeMove(rowX, colX, Board.X);
+                        }
                     }
                     break;
                 default:
@@ -59,7 +72,7 @@ public class Main {
         userInputReader.close();    
     }
 
-    public int readDepth(Scanner input, int maxDepth){
+    public int readDepth(Scanner input,int maxDepth){
         while(true){
             System.out.print("Please select minimax algorithm depth (Valid input > 0) : ");
             try { 

@@ -59,8 +59,8 @@ public class Board{
 		lastMove = board.lastMove;
 		lastLetterPlayed = board.lastLetterPlayed;
 		gameBoard = new int[8][8];
-		this.validRowsHelper = board.validRowsHelper;
-		this.validColsHelper = board.validColsHelper;
+		validRowsHelper = new ArrayList<>();
+		validColsHelper = new ArrayList<>();
 		for(int i=0; i<8; i++)
 		{
 			for(int j=0; j<8; j++)
@@ -486,6 +486,29 @@ public class Board{
 					sum += weights[i][j];
 			}
 		return sum;
+	}
+
+	public ArrayList<Board> getChildren(int letter)
+	{
+		ArrayList<Board> children = new ArrayList<Board>();
+		for(int row=0; row<8; row++)
+		{
+			for(int col=0; col<8; col++)
+			{
+				Board child = new Board(this);
+				if(child.isValidMove(row, col))
+				{
+					child.gameBoard[row][col]=VALID;
+					
+					
+					child.validRowsHelper.add(row);
+					child.validColsHelper.add(col);
+					child.makeMove(row, col, letter);
+					children.add(child);
+				}
+			}
+		}
+		return children;
 	}
 
 

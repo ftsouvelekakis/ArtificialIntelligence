@@ -12,8 +12,8 @@ public class Main {
         maxDepth =app.readDepth(userInputReader,maxDepth);
         turn = app.readTurn(userInputReader, turn);
         
-        GamePlayer ΧPlayer = new GamePlayer(maxDepth,Board.X);
-        GamePlayer ΟPlayer = new GamePlayer(maxDepth,Board.O);
+        GamePlayer XPlayer = new GamePlayer(maxDepth,Board.X);
+        GamePlayer OPlayer = new GamePlayer(maxDepth,Board.O);
         
         Board board = new Board();
         board.print();
@@ -27,15 +27,18 @@ public class Main {
                     if(board.noValidMoves(Board.O)){
                         if(turn==1){
                             board.resetValidMoves();
-                            Move OMove = ΟPlayer.MiniMax(board);
+                            Move OMove = OPlayer.MiniMax(board);
                             board.setValidHelper(OMove.getRow(),OMove.getCol());
                             board.makeMove(OMove.getRow(), OMove.getCol(), Board.O);
                         }
                         else
                         {
-                            int rowO = userInputReader.nextInt();
-                            int colO = userInputReader.nextInt();
-                            board.makeMove(rowO, colO, Board.O);
+                            System.out.println("\nValid moves:");
+                            for(int i =0; i<board.getValidRowsHelper().size(); i++){
+                                System.out.println((i+1) + ") " + board.getValidRowsHelper().get(i) + " " + board.getValidColsHelper().get(i));
+                            }
+                            int choice = Integer.parseInt(userInputReader.nextLine());
+                            board.makeMove(board.getValidRowsHelper().get(choice-1), board.getValidColsHelper().get(choice-1), Board.O);
                         }   
                     }
                     break;
@@ -44,15 +47,18 @@ public class Main {
                     if(board.noValidMoves(Board.X)){
                         if(turn==0){
                             board.resetValidMoves();
-                            Move XMove = ΧPlayer.MiniMax(board);
+                            Move XMove = XPlayer.MiniMax(board);
                             board.setValidHelper(XMove.getRow(),XMove.getCol());
                             board.makeMove(XMove.getRow(), XMove.getCol(), Board.X);
                         }
                         else
                         {
-                            int rowX = userInputReader.nextInt();
-                            int colX = userInputReader.nextInt();
-                            board.makeMove(rowX, colX, Board.X);
+                            System.out.println("\nValid moves:");
+                            for(int i =0; i<board.getValidRowsHelper().size(); i++){
+                                System.out.println((i+1) + ") " + board.getValidRowsHelper().get(i) + " " + board.getValidColsHelper().get(i));
+                            }
+                            int choice = Integer.parseInt(userInputReader.nextLine());
+                            board.makeMove(board.getValidRowsHelper().get(choice-1), board.getValidColsHelper().get(choice-1), Board.X);
                         }
                     }
                     break;

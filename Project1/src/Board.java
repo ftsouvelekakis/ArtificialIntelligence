@@ -458,6 +458,14 @@ public class Board{
 		gameBoard[row][col]=VALID;
 	}
 
+	public ArrayList<Integer> getValidRowsHelper(){
+		return this.validRowsHelper;
+	}
+
+	public ArrayList<Integer> getValidColsHelper(){
+		return this.validColsHelper;
+	}
+
 	public boolean isValidMove(int row, int col)
 	{	
 		if(gameBoard[row][col]==EMPTY){

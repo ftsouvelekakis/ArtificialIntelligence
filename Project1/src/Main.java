@@ -5,12 +5,17 @@ public class Main {
         Scanner userInputReader = new Scanner(System.in);
         int turn = -1;
         int maxDepth=0;
+        int gameMode=0;
 
-        System.out.println("-------------Othello Game-------------\n");
+        System.out.println("-------------Othello-------------\n");
         Main app = new Main();
-        
-        maxDepth =app.readDepth(userInputReader,maxDepth);
-        turn = app.readTurn(userInputReader, turn);
+        gameMode =app.readGameMode(userInputReader, gameMode);
+        if(gameMode==2 || gameMode==3){
+            maxDepth =app.readDepth(userInputReader,maxDepth);
+        }
+        if(gameMode==2){
+            turn = app.readTurn(userInputReader, turn);
+        }
         
         GamePlayer XPlayer = new GamePlayer(maxDepth,Board.X);
         GamePlayer OPlayer = new GamePlayer(maxDepth,Board.O);
@@ -25,13 +30,13 @@ public class Main {
                 case Board.X:
                     System.out.println("O moves");
                     if(board.noValidMoves(Board.O)){
-                        if(turn==1){
+                        if((turn==1 && gameMode==2) || gameMode==3 ){
                             board.resetValidMoves();
                             Move OMove = OPlayer.MiniMax(board);
                             board.setValidHelper(OMove.getRow(),OMove.getCol());
                             board.makeMove(OMove.getRow(), OMove.getCol(), Board.O);
                         }
-                        else
+                        else if((turn==0 && gameMode==2) || gameMode==1)
                         {
                             System.out.println("\nValid moves:");
                             for(int i =0; i<board.getValidRowsHelper().size(); i++){
@@ -45,13 +50,13 @@ public class Main {
                 case Board.O:  
                     System.out.println("X moves");
                     if(board.noValidMoves(Board.X)){
-                        if(turn==0){
+                        if((turn==0 && gameMode == 2) || gameMode==3){
                             board.resetValidMoves();
                             Move XMove = XPlayer.MiniMax(board);
                             board.setValidHelper(XMove.getRow(),XMove.getCol());
                             board.makeMove(XMove.getRow(), XMove.getCol(), Board.X);
                         }
-                        else
+                        else if((turn==1 && gameMode==2) || gameMode==1)
                         {
                             System.out.println("\nValid moves:");
                             for(int i =0; i<board.getValidRowsHelper().size(); i++){
@@ -124,5 +129,33 @@ public class Main {
             }
         }
         return turn;
+    }
+
+    public int readGameMode(Scanner input,int gameMode){
+        while(gameMode!=1 && gameMode!=2 && gameMode!=3){
+            System.out.println("Game modes:" + "\n1)Human vs Human"+"\n2)Human Vs AI"+"\n3)AI vs AI");
+            System.out.println("Please select game mode: ");
+            try {
+                gameMode = Integer.parseInt(input.nextLine());
+                if (gameMode==1){
+                    System.out.println("\nHuman vs Human mode selected\n");
+                    break;
+                }
+                else if(gameMode==2){
+                    System.out.println("\nHuman vs AI mode selected\n");
+                    break;
+                }
+                else if(gameMode==3){
+                    System.out.println("\nAI vs AI mode selected\n");
+                    break;
+                }else{
+                    System.out.println("\n-----Wrong input please select between 1-3-----");
+                }
+            }
+            catch (NumberFormatException e) {
+                System.out.println("\n-----Wrong input please select between 1-3-----");
+            }
+        }
+        return gameMode;
     }
 }

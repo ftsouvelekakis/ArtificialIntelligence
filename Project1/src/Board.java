@@ -499,8 +499,13 @@ public class Board{
 		int sum = 0;
 		for(int i=0; i<8; i++)
 			for(int j=0; j<8; j++) {
-				if(gameBoard[i][j] == opponent(lastLetterPlayed))
+				if(gameBoard[i][j] == X){
 					sum += weights[i][j];
+				}
+				else if (gameBoard[i][j] == O)
+				{
+					sum += ((-1) * weights[i][j]);
+				}
 			}
 		return sum;
 	}

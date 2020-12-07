@@ -17,49 +17,38 @@ public class GamePlayer{
 		this.playerLetter = playerLetter;
     }
     
-   
-
-    //Initiates the MiniMax algorithm
 	public Move MiniMax(Board board)
 	{
-        //If the X plays then it wants to MAXimize the heuristics value
         if (playerLetter == Board.X)
         {
             return max(new Board(board), 0);
         }
-        //If the O plays then it wants to MINimize the heuristics value
         else
         {
             return min(new Board(board), 0);
         }
-	}
-
-    // The max and min functions are called interchangingly, one after another until a max depth is reached
+    }
+    
 	public Move max(Board board, int depth)
 	{
         Random r = new Random();
 
-        /* If MAX is called on a state that is terminal or after a maximum depth is reached,
-         * then a heuristic is calculated on the state and the move returned.
-         */
 		if((board.isTerminal()) || (depth == maxDepth))
 		{
 			Move lastMove = new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate());
 			return lastMove;
-		}
-        //The children-moves of the state are calculated
+        }
+        
 		ArrayList<Board> children = new ArrayList<Board>(board.getChildren(Board.X));
 		Move maxMove = new Move(Integer.MIN_VALUE);
 		for (Board child : children)
 		{
-            //And for each child min is called, on a lower depth
-			Move move = min(child, depth + 1);
-            //The child-move with the greatest value is selected and returned by max
+            Move move = min(child, depth + 1);
+            
 			if(move.getValue() >= maxMove.getValue())
 			{
                 if ((move.getValue() == maxMove.getValue()))
                 {
-                    //If the heuristic has the save value then we randomly choose one of the two moves
                     if (r.nextInt(2) == 0)
                     {
                         maxMove.setRow(child.getLastMove().getRow());
@@ -74,11 +63,11 @@ public class GamePlayer{
                     maxMove.setValue(move.getValue());
                 }
 			}
-		}
+        }
+        
 		return maxMove;
 	}
 
-    //Min works similarly to max
 	public Move min(Board board, int depth)
 	{
         Random r = new Random();

@@ -15,9 +15,6 @@ public class Main {
         GamePlayer ΧPlayer = new GamePlayer(maxDepth,Board.X);
         GamePlayer ΟPlayer = new GamePlayer(maxDepth,Board.O);
         
-        
-        
-
         Board board = new Board();
         board.print();
 		while(!board.isTerminal())
@@ -29,7 +26,9 @@ public class Main {
                     System.out.println("O moves");
                     if(board.noValidMoves(Board.O)){
                         if(turn==1){
+                            board.resetValidMoves();
                             Move OMove = ΟPlayer.MiniMax(board);
+                            board.setValidHelper(OMove.getRow(),OMove.getCol());
                             board.makeMove(OMove.getRow(), OMove.getCol(), Board.O);
                         }
                         else
@@ -44,7 +43,9 @@ public class Main {
                     System.out.println("X moves");
                     if(board.noValidMoves(Board.X)){
                         if(turn==0){
+                            board.resetValidMoves();
                             Move XMove = ΧPlayer.MiniMax(board);
+                            board.setValidHelper(XMove.getRow(),XMove.getCol());
                             board.makeMove(XMove.getRow(), XMove.getCol(), Board.X);
                         }
                         else

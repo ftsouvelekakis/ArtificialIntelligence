@@ -59,8 +59,8 @@ public class Board{
 		lastMove = board.lastMove;
 		lastLetterPlayed = board.lastLetterPlayed;
 		gameBoard = new int[8][8];
-		validRowsHelper = new ArrayList<>();
-		validColsHelper = new ArrayList<>();
+		validRowsHelper = board.validRowsHelper;
+		validColsHelper = board.validColsHelper;
 		for(int i=0; i<8; i++)
 		{
 			for(int j=0; j<8; j++)
@@ -452,9 +452,18 @@ public class Board{
 		}
 	}
 
+	public void setValidHelper(int row,int col){
+		validColsHelper.add(col);
+		validRowsHelper.add(row);
+		gameBoard[row][col]=VALID;
+	}
+
 	public boolean isValidMove(int row, int col)
-	{
-		return (scan8Dim(row,col,opponent(lastLetterPlayed)));
+	{	
+		if(gameBoard[row][col]==EMPTY){
+			return (scan8Dim(row,col,opponent(lastLetterPlayed)));
+		}
+		return false;
 	}
 
 	public void resetValidMoves()
@@ -491,16 +500,16 @@ public class Board{
 	public ArrayList<Board> getChildren(int letter)
 	{
 		ArrayList<Board> children = new ArrayList<Board>();
+		
 		for(int row=0; row<8; row++)
 		{
 			for(int col=0; col<8; col++)
 			{
-				Board child = new Board(this);
-				if(child.isValidMove(row, col))
+				this.resetScanFlags();
+				if(this.isValidMove(row, col))
 				{
+					Board child = new Board(this);
 					child.gameBoard[row][col]=VALID;
-					
-					
 					child.validRowsHelper.add(row);
 					child.validColsHelper.add(col);
 					child.makeMove(row, col, letter);

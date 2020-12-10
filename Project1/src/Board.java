@@ -404,6 +404,44 @@ public class Board{
 		System.out.println("\nX:" +countX + " O:"+countO);
 	}
 
+	public void printWithout()
+	{
+		countX=0;
+		countO=0;
+		System.out.println("\n  0 1 2 3 4 5 6 7  ");
+		for(int row=0; row<8; row++)
+		{
+			System.out.print(row + " ");
+			for(int col=0; col<8; col++)
+			{
+				switch (gameBoard[row][col])
+				{
+					case X:
+						System.out.print("X ");
+						countX++;
+						break;
+					case O:
+						System.out.print("O ");
+						countO++;
+						break;
+					case EMPTY:
+						{
+							System.out.print("- ");
+						}
+						break;
+					case VALID:
+						System.out.print("+ ");
+						break;
+					default:
+						break;
+				}
+			}
+			System.out.println(row);
+		}
+		System.out.println("  0 1 2 3 4 5 6 7  ");
+		System.out.println("\nX:" +countX + " O:"+countO);
+	}
+
 	public boolean isTerminal()
 	{
 		if(countNoValid==2){
@@ -436,12 +474,6 @@ public class Board{
 
 	public boolean noValidMoves(int moveLetter){
 		if (validRowsHelper.size()==0){
-			if(moveLetter==O)
-				System.out.println("Player O has no valid moves" );
-			else
-			{
-				System.out.println("Player X has no valid moves" );
-			}
 			lastLetterPlayed=moveLetter;
 			countNoValid++;
 			return false;
@@ -497,16 +529,17 @@ public class Board{
 					  	{-20,-40,-5,-5,-5,-5,-40,-20},
 					  	{120,-20,20,5,5,20,-20,120}};
 		int sum = 0;
-		for(int i=0; i<8; i++)
+		for(int i=0; i<8; i++){
 			for(int j=0; j<8; j++) {
 				if(gameBoard[i][j] == X){
 					sum += weights[i][j];
 				}
 				else if (gameBoard[i][j] == O)
 				{
-					sum += ((-1) * weights[i][j]);
+					sum -=  weights[i][j];
 				}
 			}
+		}
 		return sum;
 	}
 
@@ -518,6 +551,7 @@ public class Board{
 		{
 			for(int col=0; col<8; col++)
 			{
+				
 				this.resetScanFlags();
 				if(this.isValidMove(row, col))
 				{

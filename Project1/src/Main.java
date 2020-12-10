@@ -1,19 +1,21 @@
 import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) throws Exception {
         Scanner userInputReader = new Scanner(System.in);
         int turn = -1;
-        int maxDepth=0;
-        int gameMode=0;
+        int maxDepth = 0;
+        int gameMode = 0;
 
         System.out.println("-------------Othello-------------\n");
         Main app = new Main();
+        
         gameMode =app.readGameMode(userInputReader, gameMode);
-        if(gameMode==2 || gameMode==3){
-            maxDepth =app.readDepth(userInputReader,maxDepth);
+        if(gameMode == 2 || gameMode == 3)
+        {
+            maxDepth = app.readDepth(userInputReader,maxDepth);
         }
-        if(gameMode==2){
+        if(gameMode == 2)
+        {
             turn = app.readTurn(userInputReader, turn);
         }
         
@@ -24,27 +26,37 @@ public class Main {
         board.print();
 		while(!board.isTerminal())
 		{
+            if(gameMode == 3)
+            {
+                Thread.sleep(2000);
+            }
             System.out.println();
             switch (board.getLastLetterPlayed())
             {
                 case Board.X:
                     System.out.println("O moves");
-                    if(board.noValidMoves(Board.O)){
-                        if((turn==1 && gameMode==2) || gameMode==3 ){
+                    if(board.noValidMoves(Board.O))
+                    {
+                        if((turn==1 && gameMode==2) || gameMode==3 )
+                        {
                             board.resetValidMoves();
                             Move OMove = OPlayer.MiniMax(board);
+                            System.out.println( OMove.getValue());
                             board.setValidHelper(OMove.getRow(),OMove.getCol());
                             board.makeMove(OMove.getRow(), OMove.getCol(), Board.O);
                         }
                         else if((turn==0 && gameMode==2) || gameMode==1)
                         {
                             System.out.println("\nValid moves:");
-                            for(int i =0; i<board.getValidRowsHelper().size(); i++){
+                            for(int i =0; i<board.getValidRowsHelper().size(); i++)
+                            {
                                 System.out.println((i+1) + ") " + board.getValidRowsHelper().get(i) + " " + board.getValidColsHelper().get(i));
                             }
                             int choice = Integer.parseInt(userInputReader.nextLine());
                             board.makeMove(board.getValidRowsHelper().get(choice-1), board.getValidColsHelper().get(choice-1), Board.O);
                         }   
+                    }else{
+                        System.out.println("Player O has no valid moves");
                     }
                     break;
                 case Board.O:  
@@ -65,6 +77,8 @@ public class Main {
                             int choice = Integer.parseInt(userInputReader.nextLine());
                             board.makeMove(board.getValidRowsHelper().get(choice-1), board.getValidColsHelper().get(choice-1), Board.X);
                         }
+                    }else{
+                        System.out.println("Player X has no valid moves" );
                     }
                     break;
                 default:

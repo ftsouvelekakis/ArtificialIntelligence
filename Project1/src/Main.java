@@ -46,6 +46,7 @@ public class Main{
                         {
                             Move OMove = OPlayer.MiniMax(board); //call minimax algorithm
                             board.makeMove(OMove.getRow(), OMove.getCol(), Board.O);
+                            System.out.println("O moved at: row: " + OMove.getRow() + " , col: " + OMove.getCol() );
                         }
                         else if((turn==0 && gameMode==2) || gameMode==1) // else if human
                         {
@@ -73,6 +74,7 @@ public class Main{
                         {
                             Move XMove = XPlayer.MiniMax(board);
                             board.makeMove(XMove.getRow(), XMove.getCol(), Board.X);
+                            System.out.println("X moved at: row: " + XMove.getRow() + " , col: " + XMove.getCol() );
                         }
                         else if((turn == 1 && gameMode == 2) || gameMode == 1)
                         {

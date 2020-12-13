@@ -33,7 +33,7 @@ public class Main{
 		{
             if(gameMode == 3)
             {
-                //Thread.sleep(2000);  // if Ai vs Ai pause the program for better readability
+                Thread.sleep(2000);  // if Ai vs Ai pause the program for better readability
             }
             System.out.println();
             switch (board.getLastLetterPlayed())
@@ -61,6 +61,8 @@ public class Main{
                     else
                     {
                         System.out.println("Player O has no valid moves");
+                        Thread.sleep(2000);
+
                     }
                     break;
                 case Board.O:  //Same as O
@@ -86,6 +88,7 @@ public class Main{
                     else
                     {
                         System.out.println("Player X has no valid moves" );
+                        Thread.sleep(2000);
                     }
                     break;
                 default:

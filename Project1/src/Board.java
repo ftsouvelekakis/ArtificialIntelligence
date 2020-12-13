@@ -4,13 +4,12 @@ public class Board{
 	public static final int X = 1;
 	public static final int O = -1;
 	public static final int EMPTY = 0;
-	public static final int VALID = -2;
 	
-	int tempRow;
-	int tempCol;
-	int countX;
-	int countO;
-	int countNoValid;
+	private int tempRow;
+	private int tempCol;
+	private int countX;
+	private int countO;
+	private int countNoValid;
 	boolean scanRowLeft;
 	boolean scanRowRight;
 	boolean scanColDown;
@@ -34,7 +33,7 @@ public class Board{
 		validColsHelper = new ArrayList<>();
 		for(int i=0; i<8; i++)
 		{
-			for(int j=0; j<8; j++)
+			for(int j=0; j<8; j++) // initialise board
 			{
 				if((i==4 && j==4) || (i==3 && j==3))
 				{
@@ -82,19 +81,27 @@ public class Board{
 		}
 	}
 
-	public boolean noValidMoves(int moveLetter){
-		if (validRowsHelper.size()==0){
-			lastLetterPlayed=moveLetter;
+	//check if given player has valid moves 
+
+	public boolean noValidMoves(int moveLetter)
+	{
+		if (validRowsHelper.size() == 0)
+		{
+			lastLetterPlayed = moveLetter;
 			countNoValid++;
 			return true;
 		}
-		else{
+		else
+		{
 			countNoValid=0;
 			return false;
 		}
 	}
 
-	public void findAllValidMoves(int player){
+	// find all the moves whick are available at current board
+
+	public void findAllValidMoves(int player)
+	{
 		validRowsHelper.clear();
 		validColsHelper.clear();
 		for(int i = 0; i < 8; i++)
@@ -110,19 +117,22 @@ public class Board{
 		}
 	}
 
+	// check if move is legal for given row,col and player
+
 	public boolean isValidMove(int row, int col,int player)
 	{	
-		if(gameBoard[row][col]==EMPTY){
+		if(gameBoard[row][col]==EMPTY)
+		{
 			return (scan8Dim(row,col,player));
 		}
 		return false;
 	}
 
-	
+	//chech if board is funal stage
 
 	public boolean isTerminal()
 	{
-		if(countNoValid==2)
+		if(countNoValid == 2)
 		{
 			return true;
 		}
@@ -130,7 +140,7 @@ public class Board{
 		{
 			for(int col = 0; col < 8; col++)
 			{
-				if(gameBoard[row][col] == EMPTY || gameBoard[row][col] == VALID)
+				if(gameBoard[row][col] == EMPTY)
 				{
 					return false;
 				}
@@ -139,10 +149,12 @@ public class Board{
 		return true;
 	}
 
+	// prints board
+
 	public void print()
 	{
-		countX=0;
-		countO=0;
+		countX = 0; 	//count the disks for each player
+		countO = 0;
 		System.out.println("\n  0 1 2 3 4 5 6 7  ");
 		for(int row=0; row<8; row++)
 		{
@@ -160,7 +172,8 @@ public class Board{
 						countO++;
 						break;
 					case EMPTY:
-						if(isValidMove(row, col, opponent(lastLetterPlayed))){
+						if(isValidMove(row, col, opponent(lastLetterPlayed)))
+						{
 							System.out.print("+ ");
 						}
 						else{
@@ -178,35 +191,24 @@ public class Board{
 		System.out.println("\nX:" +countX + " O:"+countO);
 	}
 
-	public int evaluate()
+	public int evaluate(int player)
 	{
-		//System.out.println("i am evaluation");
-		int weights[][]={{120,-20,20,5,5,20,-20,120},
-					  	{-20,-40,-5,-5,-5,-5,-40,-20},
-					  	{20,-5,15,3,3,15,-5,20},
-					  	{5,-5,3,3,3,3,-5,5},
-					  	{5,-5,3,3,3,3,-5,5},
-					  	{20,-5,15,3,3,15,-5,20},
-					  	{-20,-40,-5,-5,-5,-5,-40,-20},
-					  	{120,-20,20,5,5,20,-20,120}};
-		int sum = 0;
-		for(int i=0; i<8; i++){
-			for(int j=0; j<8; j++) {
-				if(gameBoard[i][j] == X){
-					sum += weights[i][j];
-				}
-				else if (gameBoard[i][j] == O)
-				{
-					sum -=  weights[i][j];
-				}
-			}
+		if (getDisksOnBoard() <= 20) {
+			// Opening game
+			return 5*mobility() + 20*squareWeight(player) + 10000*corners(player);
 		}
-		return sum;
+		else if (getDisksOnBoard() <= 58) {
+			// Midgame
+			return 10*diskDifference() + 2*mobility() + 10*squareWeight(player) + 10000*corners(player);
+		}
+		else {
+			// Endgame
+			return 500*diskDifference() + 10000*corners(player);
+		}
 	}
 
-	public int evaluateM()
-	{
-		System.out.println("I am mobility evaluation");
+	public int squareWeight(int player){
+		
 		int weights[][]={{120,-20,20,5,5,20,-20,120},
 					  	{-20,-40,-5,-5,-5,-5,-40,-20},
 					  	{20,-5,15,3,3,15,-5,20},
@@ -214,56 +216,115 @@ public class Board{
 					  	{5,-5,3,3,3,3,-5,5},
 					  	{20,-5,15,3,3,15,-5,20},
 					  	{-20,-40,-5,-5,-5,-5,-40,-20},
-					  	{120,-20,20,5,5,20,-20,120}};
-		int sum = 0;
-		int remainMoves =0;
-		int myCoins = 0;
-		int oppCoins = 0;
+						  {120,-20,20,5,5,20,-20,120}};
+		if(gameBoard[0][0] !=0 ){
+			for(int i = 0; i<4; i++){
+				for(int j = 0; j<4; j++){
+					weights[i][j]=0;
+				}
+			}
+		}
+		if(gameBoard[0][7] !=0 ){
+			for(int i = 0; i<4; i++){
+				for(int j = 7; j>=4; j--){
+					weights[i][j]=0;
+				}
+			}
+		}
+		if(gameBoard[7][0] !=0 ){
+			for(int i = 7; i>=4; i--){
+				for(int j = 0; j<4; j++){
+					weights[i][j]=0;
+				}
+			}
+		}
+		if(gameBoard[7][7] !=0 ){
+			for(int i = 7; i>=4; i--){
+				for(int j = 7; j>=4; j--){
+					weights[i][j]=0;
+				}
+			}
+		}
+		
+		int sumX = 0;
+		int sumO = 0;
 		for(int i=0; i<8; i++){
 			for(int j=0; j<8; j++) {
 				if(gameBoard[i][j] == X){
-					sum += weights[i][j];
-					myCoins++;
+					sumX += weights[i][j];
 				}
 				else if (gameBoard[i][j] == O)
 				{
-					sum -=  weights[i][j];
-					oppCoins++;
-				}else{
-					remainMoves++;
+					sumO +=  weights[i][j];
 				}
 			}
 		}
-		/*double m= 0;
-		int myValidMoves = 0; 
-		int oppValidMoves = 0;
-		for(int i=0; i<8; i++){
-			for (int j=0; j<8; j++){
-				resetScanFlags();
-				if(isValidMove(i, j, X)){
-					myValidMoves++;
-				}else if(isValidMove(i, j, O)){
-					oppValidMoves++;
-				}
-			}
-		}
-		if(myValidMoves > oppValidMoves){
-			m = (100.0 * myValidMoves)/(myValidMoves + oppValidMoves);
-		}else if(myValidMoves < oppValidMoves){
-			m = -(100.0 * oppValidMoves)/(myValidMoves + oppValidMoves);
+		if (player == 1) {
+			return sumX;
 		}else{
-			m = 0;
+			return -1*sumO;
 		}
-		double c = 0;
-		c = 100* (myCoins - oppCoins)/(myCoins + oppCoins);
+	}
 
-		if(remainMoves>2){
-			return ((int) m * 5 + sum * 10 );
-		}else{
-			return ((int) m * 1 + sum * 5 + (int) c * 10);
-		}*/
-		return sum;
+	public int diskDifference(){  //calculates whick player have more disks
+		countX = 0;
+		countO = 0;
+		for(int i = 0; i < 8; i++){
+			for(int j = 0; j < 8; j++){
+				if (gameBoard[i][j]==1){
+					countX++;
+				}else if(gameBoard[i][j]==-1){
+					countO++;
+				}
+			}
+		}
+        return 100 * (countX - countO) / (countX + countO+1);
+    	
+	}
+
+	public int mobility(){  // less available moves for opponent is better for player
+		int xMoves = 0;
+		int oMoves = 0;
+		findAllValidMoves(1);
+		xMoves = validRowsHelper.size();
+
+		findAllValidMoves(-1);
+		oMoves = validRowsHelper.size();
+
 		
+		return 100 * (xMoves - oMoves) / (xMoves + oMoves + 1);
+		
+	}
+
+	public int corners(int player) {  // give better a player with more corners
+		int xCorners = 0;
+		int oCorners = 0;
+		if (gameBoard[0][0] == 1) {
+			xCorners++;
+		}
+		else if (gameBoard[0][0] == -1) {
+			oCorners++;
+		}
+		if (gameBoard[0][7] == 1) {
+			xCorners++;
+		}
+		else if (gameBoard[0][7] == -1) {
+			oCorners++;
+		}
+		if (gameBoard[7][0] == 1) {
+			xCorners++;
+		}
+		else if (gameBoard[7][0] == -1) {
+			oCorners++;
+		}
+		if (gameBoard[7][7] == 1) {
+			xCorners++;
+		}
+		else if (gameBoard[7][7] == -1) {
+			oCorners++;
+		}
+		
+		return 100 * (xCorners - oCorners) / (xCorners + oCorners + 1);
 		
 	}
 
@@ -296,6 +357,8 @@ public class Board{
 		}
 		return children;
 	}
+
+	//check which paths from given position are valid
 
 	public boolean scan8Dim(int row,int col,int player)
 	{
@@ -522,6 +585,8 @@ public class Board{
 		return (scanRowRight||scanRowLeft||scanColDown||scanColUp||scanDiag0Down||scanDiag0Up||scanDiag1Down||scanDiag1Up);
 	}
 
+	//check valid paths and flip the diskss for the given player
+
 	public void flip8Dim(int row,int col,int moveLetter)
 	{
 		tempRow  =row; //save row and col
@@ -629,6 +694,19 @@ public class Board{
 		}
 	}
 
+	//----------getters and setters---------
+	public int getDisksOnBoard(){
+		int disksOnBoard = 0;
+		for(int i = 0; i < 8; i++){
+			for(int j = 0; j < 8; j++){
+				if(gameBoard[i][j] != EMPTY){
+					disksOnBoard++;
+				}
+			}
+		}
+		return disksOnBoard;
+	}
+
 	public Move getLastMove()
 	{
 		return lastMove;
@@ -642,6 +720,18 @@ public class Board{
 	public int[][] getGameBoard()
 	{
 		return gameBoard;
+	}
+
+	public int getCountX(){
+		return countX;
+	}
+
+	public int getCountO(){
+		return countO;
+	}
+
+	public int getCountNoValid(){
+		return countNoValid;
 	}
 
 	public void setValidHelper(int row,int col){

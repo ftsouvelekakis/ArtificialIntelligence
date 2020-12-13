@@ -1,7 +1,8 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-public class GamePlayer{
+public class GamePlayer
+{
     int maxDepth = 0;
     private int playerLetter;
     
@@ -17,7 +18,7 @@ public class GamePlayer{
 		this.playerLetter = playerLetter;
     }
     
-	public Move MiniMax(Board board)
+	public Move MiniMax(Board board)  //implement minimax algorith with apha - beta pruning
 	{
         int alpha = Integer.MIN_VALUE;
         int beta = Integer.MAX_VALUE;
@@ -31,7 +32,7 @@ public class GamePlayer{
         }
     }
     
-	public Move max(Board board, int depth,int alpha,int beta)
+	public Move max(Board board, int depth,int alpha,int beta) 
 	{
         Random r = new Random();
         
@@ -39,8 +40,7 @@ public class GamePlayer{
 
 		if((board.isTerminal()) || (depth == maxDepth) || (children.size()==0))
 		{
-            //System.out.println("I am player :" + (board.getLastLetterPlayed()));
-			Move lastMove = new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate());
+			Move lastMove = new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate(board.opponent(board.getLastLetterPlayed())));
 			return lastMove;
         }
 		Move maxMove = new Move(Integer.MIN_VALUE);
@@ -69,21 +69,9 @@ public class GamePlayer{
             
             alpha = maxMove.getValue();
             if(alpha >= beta){
-                //System.out.println("---------Inside Max - Pruning--------------");
                 break;
             }
-            /* if(depth+1==2){
-                System.out.println("player"+ board.opponent(board.getLastLetterPlayed() )+"  Max Children at depth " + (depth + 1) + " : ");
-                System.out.println("Evalution of max " + child.evaluate());
-                child.print();
-            }else{
-                System.out.println("player"+ board.opponent(board.getLastLetterPlayed() )+"  Max Children at depth " + (depth + 1) );
-                System.out.println("Returned eval of max " + maxMove.getValue()+  "alpha : " + alpha + " beta : " + beta);
-               child.print();
-            } */
         }
-        //System.out.println("player"+ board.opponent(board.getLastLetterPlayed() )+"  Max Parent at depth " + depth + " :" + " and i choose this eval" + maxMove.getValue()+ "alpha : " + alpha + " beta : " + beta);
-        //board.print();
 		return maxMove;
 	}
 
@@ -94,8 +82,7 @@ public class GamePlayer{
         ArrayList<Board> children = new ArrayList<Board>(board.getChildren(Board.O));
 		if((board.isTerminal()) || (depth == maxDepth) || (children.size()==0))
 		{
-            //System.out.println("I am player :" + (board.getLastLetterPlayed()));
-			Move lastMove = new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate());
+			Move lastMove = new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate(board.opponent(board.getLastLetterPlayed())));
 			return lastMove;
         }
 		Move minMove = new Move(Integer.MAX_VALUE);
@@ -124,22 +111,9 @@ public class GamePlayer{
             
             beta = minMove.getValue();
             if(alpha >= beta){
-                //System.out.println("---------Inside Min - Pruning--------------");
                 break;
             }
-            if(depth+1==2){
-                System.out.println("player: "+ board.opponent(board.getLastLetterPlayed() )+"  min Children at depth " + (depth + 1) + " : ");
-                System.out.println("Evalution of min " + child.evaluateM());
-                child.print();
-            }else{
-                System.out.println("player: "+ board.opponent(board.getLastLetterPlayed() )+"  min Children at depth " + (depth + 1) + " : ");
-                System.out.println("eval returned " + minMove.getValue()+ "alpha : " + alpha + " beta : " + beta);
-                child.print();
-            }
         }
-        System.out.println("player : "+ board.opponent(board.getLastLetterPlayed() ) + "Min Parent at depth " + depth + " :" + " and i choose this eval" + minMove.getValue() + "alpha : " + alpha + " beta : " + beta);
-        board.print();
         return minMove;
     }
-
 }

@@ -1,3 +1,6 @@
+
+import com.bethecoder.ascii_table.ASCIITable;
+
 public class Main {
     public static void main(String[] args) throws Exception {
         String path = System.getProperty("user.dir");
@@ -16,7 +19,7 @@ public class Main {
 
 
         boolean flagIG = true;                      //if true info gain is enabled 
-        boolean createInfoGainChart = false;         //if true best parameter for IG will be calculated (false by default cause it will take time)
+        boolean createInfoGainChart = false;         //if true best parameter for IG will be calculated and IG chart,table will be created (false by default cause it will take time)
 
         double[] f1=new double[11];                 // array for keeping f1 values
         double[] recall=new double[11];             //  -\\-  -\\- -\\-  recall values
@@ -46,7 +49,7 @@ public class Main {
             nb.train(vocabPath,vocabM,vocabN,trainingPath,"/pos","/neg",totalSamples);
 
             if (flagIG){
-            nb.infoGain(igM);
+                nb.infoGain(igM);
             }
 
             System.out.println("----Testing with training samples----\n");
@@ -72,10 +75,13 @@ public class Main {
             totalSamples += step;
         }
         if(createInfoGainChart){
-            System.out.println("----Calculating values for IG chart----");
+            System.out.println("----Calculating values for IG chart and table----");
+            
             igValue = 0;
             step = 600;
+            System.out.print("Progress : = ");
             for(int i = 0; i<=30; i++){
+                System.out.printf("%.1f%s",(float)i/30.0f*100.0f,"% ");
                 NaiveBayes nb = new NaiveBayes();
 
                 nb.train(vocabPath,89527,1,trainingPath,"/pos","/neg",-1);
@@ -90,10 +96,11 @@ public class Main {
                 igValue += step;
                 nb.reset();
             }
+            System.out.println();
         }
 
         //creating charts
-
+        System.out.println("----Creating charts----\n");
         MatlabChart precisionChart = new MatlabChart(); 
         precisionChart.plot(totalSamplesArray, precision, "-b", 2.0f, "Presicion");
         precisionChart.RenderPlot();
@@ -126,7 +133,7 @@ public class Main {
         f1Chart.title("F1");   
         f1Chart.xlim(0, totalSamples*2);  
         f1Chart.ylim(0, 100);
-        f1Chart.xlabel("Training gSamples"); 
+        f1Chart.xlabel("Training Samples"); 
         f1Chart.ylabel("F1 %");
         f1Chart.grid("on","on"); 
         f1Chart.legend("northeast"); 
@@ -145,7 +152,7 @@ public class Main {
         accuracyChart.grid("on","on"); 
         accuracyChart.legend("northeast"); 
         accuracyChart.font("Helvetica",15);
-        accuracyChart.saveas("Accuracy.jpeg",640,480);   
+        accuracyChart.saveas("LearningCurve.jpeg",640,480);   
 
         if(createInfoGainChart){
             MatlabChart igChart = new MatlabChart(); 
@@ -159,7 +166,91 @@ public class Main {
             igChart.grid("on","on"); 
             igChart.legend("northeast"); 
             igChart.font("Helvetica",15);
-            igChart.saveas("IG.jpeg",640,480);   
+            igChart.saveas("IG.jpeg",640,480);
+        } 
+
+        System.out.println("----Creating tables----\n");
+        String[] header = {
+            "Training Samples",
+            "AccuracyDev",
+            "AccuracyTrain"
+        };
+        String[][] data = new String[11][3]; 
+      
+        for(int i=0; i<=10; i++){
+            for (int j=0; j<=2; j++){
+                if (j==0){
+                    data[i][j] = (""+totalSamplesArray[i]);
+                }else if(j==1){
+                    data[i][j] = (""+accuracy[i]);
+                }else{
+                    data[i][j] = (""+accuracyTrain[i]);
+                }
+            }
         }
+        ASCIITable.getInstance().printTable(header, data);
+
+        header = new String[2];
+        header[0] = "Training Samples";
+        header[1] = "F1";
+        data = new String[11][2];
+        for(int i=0; i<=10; i++){
+            for (int j=0; j<=1; j++){
+                if (j==0){
+                    data[i][j] = (""+totalSamplesArray[i]);
+                }else if(j==1){
+                    data[i][j] = (""+f1[i]);
+                }
+            }
+        }
+        ASCIITable.getInstance().printTable(header, data);
+
+        String[] header2= new String[2];
+        header2[0] = "Training Samples";
+        header2[1] = "Recall";
+        String[][] data2 = new String[11][2];
+        for(int i=0; i<=10; i++){
+            for (int j=0; j<=1; j++){
+                if (j==0){
+                    data2[i][j] = (""+totalSamplesArray[i]);
+                }else if(j==1){
+                    data2[i][j] = (""+recall[i]);
+                }
+            }
+        }
+        ASCIITable.getInstance().printTable(header2, data2);
+
+        String[] header3= new String[2];
+        header3[0] = "Training Samples";
+        header3[1] = "Precision";
+        String[][] data3 = new String[11][2];
+        for(int i=0; i<=10; i++){
+            for (int j=0; j<=1; j++){
+                if (j==0){
+                    data3[i][j] = (""+totalSamplesArray[i]);
+                }else if(j==1){
+                    data3[i][j] = (""+precision[i]);
+                }
+            }
+        }
+        ASCIITable.getInstance().printTable(header3, data3);
+
+        if(createInfoGainChart){
+            String[] header4= new String[2];
+            header4[0] = "Attributes";
+            header4[1] = "AccuracyIG";
+            String[][] data4 = new String[31][2];
+            for(int i=0; i<=30; i++){
+                for (int j=0; j<=1; j++){
+                    if (j==0){
+                        data4[i][j] = (""+igValueArray[i]);
+                    }else if(j==1){
+                        data4[i][j] = (""+accuracyIG[i]);
+                    }
+                }
+            }
+            ASCIITable.getInstance().printTable(header4, data4);
+        }
+        System.out.println("\n----Finish----");
     }
 }
